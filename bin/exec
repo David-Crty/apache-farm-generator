@@ -1,0 +1,11 @@
+#!/usr/bin/env php
+<?php
+
+require __DIR__.'/../vendor/autoload.php';
+
+use App\Command;
+use Symfony\Component\Console\Application;
+
+$application = new Application('ApacheFarmGenerator', '0.1-dev');
+$application->add(new App\HelloCommand());
+$application->run();
