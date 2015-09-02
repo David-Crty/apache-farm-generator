@@ -32,7 +32,7 @@ class Command extends BaseCommand
         );
         $folderName = $dialog->ask(
             $output,
-            'Veuillez entrer le nom du dossier',
+            'Veuillez entrer le nom du dossier dans /var/www',
             'example.com'
         );
         $phpVersion = $dialog->ask(
@@ -53,8 +53,11 @@ class Command extends BaseCommand
         $phpVersion = $input->getArgument('phpversion');
         $generator = new GenerateVhostFile();
         $generator->exec($serverName, $folderName, $phpVersion);
+        $output->writeln('Génération du fichier vhost [ok]');
         exec('mv '.$serverName.' /etc/apache2/site-available/');
+        $output->writeln('Déplacement du fichier [ok]');
         exec('ln -s /etc/apache2/site-available/'.$serverName.' /etc/apache2/site-enabled/'.$serverName.'');
+        $output->writeln('Lien symbolique [ok]');
         $output->writeln('[ok]');
     }
 }
