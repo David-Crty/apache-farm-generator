@@ -53,6 +53,8 @@ class Command extends BaseCommand
         $phpVersion = $input->getArgument('phpversion');
         $generator = new GenerateVhostFile();
         $generator->exec($serverName, $folderName, $phpVersion);
+        exec('mv '.$serverName.' /etc/apache2/site-available/');
+        exec('ln -s /etc/apache2/site-available/'.$serverName.' /etc/apache2/site-enabled/'.$serverName.'');
         $output->writeln('[ok]');
     }
 }
