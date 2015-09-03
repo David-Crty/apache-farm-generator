@@ -3,9 +3,13 @@
 
 require __DIR__.'/../vendor/autoload.php';
 
-use App\Command;
+use App\Vhost;
+use App\Sql;
+use App\Postfix;
 use Symfony\Component\Console\Application;
 
 $application = new Application('ApacheFarmGenerator', '0.1-dev');
-$application->add(new App\Command());
+$application->add(new Vhost());
+$application->add(new Sql());
+$application->add(new Postfix());
 $application->run();
