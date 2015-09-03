@@ -20,6 +20,7 @@ class Vhost extends BaseCommand
             ->addArgument('servername', InputArgument::REQUIRED, 'Nom du server example.com')
             ->addArgument('foldername', InputArgument::REQUIRED, 'Nom du dossier dans /var/www')
             ->addArgument('phpversion', InputArgument::REQUIRED, 'Version de php')
+            ->addArgument('redirection', InputArgument::REQUIRED, 'Effectuer la redirection vers www')
         ;
     }
     protected function interact(InputInterface $input, OutputInterface $output)
@@ -40,10 +41,16 @@ class Vhost extends BaseCommand
             'Veuillez entrer la version de php: ',
             '5.6.2'
         );
+        $redirection = $dialog->ask(
+            $output,
+            'Effectuer la redirection vers www? [Y/n] ',
+            'Y'
+        );
 
         $input->setArgument('servername', $serverName);
         $input->setArgument('foldername', $folderName);
         $input->setArgument('phpversion', $phpVersion);
+        $input->setArgument('redirection', $redirection);
     }
 
     protected function execute(InputInterface $input, OutputInterface $output)
@@ -51,8 +58,10 @@ class Vhost extends BaseCommand
         $serverName = $input->getArgument('servername');
         $folderName = $input->getArgument('foldername');
         $phpVersion = $input->getArgument('phpversion');
+        $redirection = $input->getArgument('redirection');
         $generator = new GenerateVhostFile();
-        $generator->exec($serverName, $folderName, $phpVersion);
+        $isRedirection = ($redirection == "Y" or $redirection == "y")?true:false;
+        $generator->exec($serverName, $folderName, $phpVersion, $isRedirection);
         $output->writeln('Génération du fichier vhost [ok]');
         exec('mv '.$serverName.' /etc/apache2/sites-available/');
         $output->writeln('Déplacement du fichier [ok]');
