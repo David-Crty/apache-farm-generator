@@ -27,6 +27,7 @@ class GenerateVhostFile {
     ErrorLog /var/log/apache2/{{ serverName }}-error.log
     CustomLog /var/log/apache2/{{ serverName }}-access.log combined
 </VirtualHost>
+
 EOT;
         if($is_redirection){
             $return .= <<<EOT
