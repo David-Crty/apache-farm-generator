@@ -7,7 +7,7 @@
  */
 
 namespace App;
-use App\Model\Vhost;
+use App\Model\Vhost as VhostModel;
 
 class GenerateVhostFile {
 
@@ -48,7 +48,7 @@ EOT;
 
     public function exec($serverName, $folderName, $phpVersion){
         if($this->checkPhpVersion($phpVersion)){
-            $vhost = new Vhost();
+            $vhost = new VhostModel();
             $vhost->setServerName($serverName);
             $vhost->setFolderName($folderName);
             $vhost->setPhpVersion($phpVersion);
