@@ -38,7 +38,7 @@ EOT;
         return true;
     }
 
-    private function generateVhost(Vhost $vhost){
+    private function generateVhost(VhostModel $vhost){
         $ref_file = $this->getRefFile();
         $ref_file = str_replace("{{ serverName }}", $vhost->getServerName(), $ref_file);
         $ref_file = str_replace("{{ folderName }}", $vhost->getFolderName(), $ref_file);
