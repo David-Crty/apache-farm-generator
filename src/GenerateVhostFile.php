@@ -27,7 +27,7 @@ class GenerateVhostFile {
 
     ErrorLog /var/log/apache2/{{ serverName }}-error.log
     CustomLog /var/log/apache2/{{ serverName }}-access.log combined
-</VirtualHost
+</VirtualHost>
 EOT;
         return $return;
         //return file_get_contents('./vhost.ref');
