@@ -27,17 +27,17 @@ class Command extends BaseCommand
         $dialog = $this->getHelper('dialog');
         $serverName = $dialog->ask(
             $output,
-            'Veuillez entrer le nom du server',
+            'Veuillez entrer le nom du server: ',
             'example.com'
         );
         $folderName = $dialog->ask(
             $output,
-            'Veuillez entrer le nom du dossier dans /var/www',
+            'Veuillez entrer le nom du dossier dans /var/www: ',
             'example.com'
         );
         $phpVersion = $dialog->ask(
             $output,
-            'Veuillez entrer la version de php',
+            'Veuillez entrer la version de php: ',
             '5.6.2'
         );
 
@@ -54,9 +54,9 @@ class Command extends BaseCommand
         $generator = new GenerateVhostFile();
         $generator->exec($serverName, $folderName, $phpVersion);
         $output->writeln('Génération du fichier vhost [ok]');
-        exec('mv '.$serverName.' /etc/apache2/site-available/');
+        exec('mv '.$serverName.' /etc/apache2/sites-available/');
         $output->writeln('Déplacement du fichier [ok]');
-        exec('ln -s /etc/apache2/site-available/'.$serverName.' /etc/apache2/site-enabled/'.$serverName.'');
+        exec('ln -s /etc/apache2/sites-available/'.$serverName.' /etc/apache2/sites-enabled/'.$serverName.'');
         $output->writeln('Lien symbolique [ok]');
         $output->writeln('[ok]');
     }

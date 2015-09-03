@@ -7,5 +7,5 @@ use App\Command;
 use Symfony\Component\Console\Application;
 
 $application = new Application('ApacheFarmGenerator', '0.1-dev');
-$application->add(new App\HelloCommand());
+$application->add(new App\Command());
 $application->run();
