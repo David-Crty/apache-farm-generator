@@ -57,12 +57,19 @@ class Sql extends BaseCommand
         $username = $input->getArgument('username');
         $pwd = $input->getArgument('password');
         $bdd = $input->getArgument('dbname');
-        mysql_connect('localhost','root', '');
-        mysql_query("create database $bdd;");
-        mysql_query("grant usage on *.* to $username@localhost identified by '$pwd';");
-        mysql_query("grant all privileges on $bdd.* to $username@localhost;");
-        mysql_query("FLUSH PRIVILEGES;");
-        mysql_close();
+        $root_password="";
+        try {
+            $dbh = new \PDO("mysql:host=localhost", "root", $root_password);
+
+            $dbh->exec("CREATE DATABASE `$bdd`;
+                CREATE USER '$username'@'localhost' IDENTIFIED BY '$pwd';
+                GRANT ALL ON `$bdd`.* TO '$username'@'localhost';
+                FLUSH PRIVILEGES;")
+            or die(print_r($dbh->errorInfo(), true));
+
+        } catch (\PDOException $e) {
+            die("DB ERROR: ". $e->getMessage());
+        }
         $output->writeln('[ok]');
     }
 }
