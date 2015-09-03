@@ -47,7 +47,7 @@ EOT;
 
     private function generateVhost(VhostModel $vhost, $is_redirection){
         $ref_file = $this->getRefFile($is_redirection);
-        $ref_file = str_replace("{{ serverName }}", $vhost->getServerName(), $ref_file);
+        $ref_file = str_replace("{{ serverName }}", $vhost->getServerName($is_redirection), $ref_file);
         $ref_file = str_replace("{{ folderName }}", $vhost->getFolderName(), $ref_file);
         $ref_file = str_replace("{{ phpVersion }}", $vhost->getPhpVersion(), $ref_file);
         return $ref_file;

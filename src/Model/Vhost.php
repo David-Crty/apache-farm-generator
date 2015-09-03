@@ -21,10 +21,14 @@ class Vhost {
     private $phpVersion;
 
     /**
+     * @param bool $isRedirection
      * @return string
      */
-    public function getServerName()
+    public function getServerName($isRedirection = false)
     {
+        if($isRedirection){
+            return str_ireplace("www.", "", $this->serverName);
+        }
         return $this->serverName;
     }
 

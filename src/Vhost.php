@@ -25,7 +25,7 @@ class Vhost extends BaseCommand
     protected function interact(InputInterface $input, OutputInterface $output)
     {
         $dialog = $this->getHelper('dialog');
-        $serverName = Ask::askNotEmpy($dialog, $output, 'Veuillez entrer le nom du server: ');
+        $serverName = Ask::askNotEmpyAndRegex($dialog, $output, 'Veuillez entrer le nom de domaine: ', '#^(?:[-A-Za-z0-9]+\.)+[A-Za-z]{2,6}$#');
         $folderName = Ask::askNotEmpy($dialog, $output, 'Veuillez entrer le nom du dossier dans /var/www: ');
         $phpVersion = Ask::askPhp($dialog, $output, 'Veuillez entrer la version de php: ');
         $redirection = Ask::askYesOrNo($dialog, $output, 'Effectuer la redirection vers www? [Y/n] ');

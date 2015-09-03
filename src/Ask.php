@@ -8,11 +8,12 @@
 
 namespace App;
 use Symfony\Component\Console\Output\OutputInterface;
+use Symfony\Component\Console\Helper\DialogHelper;
 
 class Ask {
 
     /**
-     * @param $dialog mixed
+     * @param $dialog DialogHelper
      * @param $output OutputInterface
      * @param $question string
      * @return mixed
@@ -20,15 +21,15 @@ class Ask {
     public static function askYesOrNo($dialog,OutputInterface $output, $question){
         return $dialog->askAndValidate($output, $question,
             function ($answer) {
-                if (strcasecmp($answer, "y") == 0 or strcasecmp($answer, "n"))
-                    throw new \RunTimeException('Cette valeur n\'est pas valide.');
-                return $answer;
+                if ((strcasecmp($answer, "y") == 0) OR (strcasecmp($answer, "n") == 0))
+                    return $answer;
+                throw new \RunTimeException('Cette valeur n\'est pas valide.');
             }
         );
     }
 
     /**
-     * @param $dialog mixed
+     * @param $dialog DialogHelper
      * @param $output OutputInterface
      * @param $question string
      * @return mixed
@@ -44,7 +45,24 @@ class Ask {
     }
 
     /**
-     * @param $dialog mixed
+     * @param $dialog DialogHelper
+     * @param OutputInterface $output
+     * @param $question
+     * @param $regex
+     * @return mixed
+     */
+    public static function askNotEmpyAndRegex($dialog,OutputInterface $output, $question, $regex){
+        return $dialog->askAndValidate($output, $question,
+            function ($answer) use ($regex) {
+                if (empty($answer) OR !preg_match($regex, $answer))
+                    throw new \RunTimeException('Cette valeur n\'est pas valide.');
+                return $answer;
+            }
+        );
+    }
+
+    /**
+     * @param $dialog DialogHelper
      * @param $output OutputInterface
      * @param $question string
      * @return mixed
@@ -66,6 +84,7 @@ class Ask {
      * @throws \Exception
      */
     protected static function getPhpVersionAvailable(){
+        return array('4.4', '5.6.2');
         $scandir = scandir('/var/www/cgi-bin-php/');
         $return = array();
         if(!$scandir){
