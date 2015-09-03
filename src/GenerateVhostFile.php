@@ -59,7 +59,9 @@ EOT;
             $vhost->setServerName($serverName);
             $vhost->setFolderName($folderName);
             $vhost->setPhpVersion($phpVersion);
-            file_put_contents($serverName, $this->generateVhost($vhost, $is_redirection));
+            if(!file_put_contents($serverName, $this->generateVhost($vhost, $is_redirection))){
+                throw new \Exception('Impossible de créer le ficher vhost.');
+            }
         }
     }
 }

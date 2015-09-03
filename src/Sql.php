@@ -11,7 +11,6 @@ namespace App;
 use Symfony\Component\Console\Command\Command as BaseCommand;
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
-use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
 
 class Sql extends BaseCommand
@@ -31,21 +30,9 @@ class Sql extends BaseCommand
     protected function interact(InputInterface $input, OutputInterface $output)
     {
         $dialog = $this->getHelper('dialog');
-        $username = $dialog->ask(
-            $output,
-            'Veuillez entrer le username mysql a créer: ',
-            'example'
-        );
-        $pwd = $dialog->ask(
-            $output,
-            'Veuillez entrer sont mot de pase: ',
-            'example'
-        );
-        $bdd = $dialog->ask(
-            $output,
-            'Veuillez entrer le nom de la bdd: ',
-            'exemple'
-        );
+        $bdd = Ask::askNotEmpy($dialog, $output, 'Veuillez entrer le nom de la bdd a créer: ');
+        $username = Ask::askNotEmpy($dialog, $output, 'Veuillez entrer le username mysql a créer: ');
+        $pwd = Ask::askNotEmpy($dialog, $output, 'Veuillez entrer le mot de passe du nouvel utilisateur: ');
 
         $input->setArgument('username', $username);
         $input->setArgument('password', $pwd);

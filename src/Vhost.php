@@ -5,7 +5,6 @@ namespace App;
 use Symfony\Component\Console\Command\Command as BaseCommand;
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
-use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
 
 class Vhost extends BaseCommand
@@ -26,26 +25,10 @@ class Vhost extends BaseCommand
     protected function interact(InputInterface $input, OutputInterface $output)
     {
         $dialog = $this->getHelper('dialog');
-        $serverName = $dialog->ask(
-            $output,
-            'Veuillez entrer le nom du server: ',
-            'example.com'
-        );
-        $folderName = $dialog->ask(
-            $output,
-            'Veuillez entrer le nom du dossier dans /var/www: ',
-            'example.com'
-        );
-        $phpVersion = $dialog->ask(
-            $output,
-            'Veuillez entrer la version de php: ',
-            '5.6.2'
-        );
-        $redirection = $dialog->ask(
-            $output,
-            'Effectuer la redirection vers www? [Y/n] ',
-            'Y'
-        );
+        $serverName = Ask::askNotEmpy($dialog, $output, 'Veuillez entrer le nom du server: ');
+        $folderName = Ask::askNotEmpy($dialog, $output, 'Veuillez entrer le nom du dossier dans /var/www: ');
+        $phpVersion = Ask::askPhp($dialog, $output, 'Veuillez entrer la version de php: ');
+        $redirection = Ask::askYesOrNo($dialog, $output, 'Effectuer la redirection vers www? [Y/n] ');
 
         $input->setArgument('servername', $serverName);
         $input->setArgument('foldername', $folderName);
@@ -62,11 +45,16 @@ class Vhost extends BaseCommand
         $generator = new GenerateVhostFile();
         $isRedirection = ($redirection == "Y" or $redirection == "y")?true:false;
         $generator->exec($serverName, $folderName, $phpVersion, $isRedirection);
-        $output->writeln('Génération du fichier vhost [ok]');
-        exec('mv '.$serverName.' /etc/apache2/sites-available/');
-        $output->writeln('Déplacement du fichier [ok]');
-        exec('ln -s /etc/apache2/sites-available/'.$serverName.' /etc/apache2/sites-enabled/'.$serverName.'');
-        $output->writeln('Lien symbolique [ok]');
-        $output->writeln('[ok]');
+        $output->writeln('<info>Génération du fichier vhost [ok]</info>');
+        if(!exec('mv '.$serverName.' /etc/apache2/sites-available/')){
+            unlink($serverName);
+            throw new \Exception('Impossible de déplacer le fichier dans /etc/apache2/sites-available/');
+        }
+        $output->writeln('<info>Déplacement du fichier [ok]</info>');
+        if(!exec('ln -s /etc/apache2/sites-available/'.$serverName.' /etc/apache2/sites-enabled/'.$serverName.'')){
+            unlink('/etc/apache2/sites-available/'.$serverName);
+            throw new \Exception('Impossible de créer le lien symbolique');
+        }
+        $output->writeln('<info>Lien symbolique [ok]</info>');
     }
 }
