@@ -46,15 +46,17 @@ class Vhost extends BaseCommand
         $isRedirection = ($redirection == "Y" or $redirection == "y")?true:false;
         $generator->exec($serverName, $folderName, $phpVersion, $isRedirection);
         $output->writeln('<info>Génération du fichier vhost [ok]</info>');
-        if(!exec('mv '.$serverName.' /etc/apache2/sites-available/')){
-            unlink($serverName);
-            throw new \Exception('Impossible de déplacer le fichier dans /etc/apache2/sites-available/');
-        }
+        //if(!exec('mv '.$serverName.' /etc/apache2/sites-available/')){
+            //unlink($serverName);
+            //throw new \Exception('Impossible de déplacer le fichier dans /etc/apache2/sites-available/');
+        //}
         $output->writeln('<info>Déplacement du fichier [ok]</info>');
-        if(!exec('ln -s /etc/apache2/sites-available/'.$serverName.' /etc/apache2/sites-enabled/'.$serverName.'')){
-            unlink('/etc/apache2/sites-available/'.$serverName);
-            throw new \Exception('Impossible de créer le lien symbolique');
-        }
+        //if(!exec('ln -s /etc/apache2/sites-available/'.$serverName.' /etc/apache2/sites-enabled/'.$serverName.'')){
+            //unlink('/etc/apache2/sites-available/'.$serverName);
+            //throw new \Exception('Impossible de créer le lien symbolique');
+        //}
+        exec('mv '.$serverName.' /etc/apache2/sites-available/');
+        exec('ln -s /etc/apache2/sites-available/'.$serverName.' /etc/apache2/sites-enabled/'.$serverName.'');
         $output->writeln('<info>Lien symbolique [ok]</info>');
     }
 }
