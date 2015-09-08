@@ -89,6 +89,7 @@ class Ask {
     protected static function getPhpVersionAvailable(){
         $scandir = scandir('/var/www/cgi-bin/');
         $return = array();
+        var_dump($scandir);
         if(!$scandir){
             throw new \Exception('Aucune version de php disponible...');
         }
