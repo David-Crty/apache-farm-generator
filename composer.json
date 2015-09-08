@@ -11,7 +11,6 @@
       "role": "Developer"
     }
   ],
-  "license": "MIT",
   "autoload": {
     "psr-4": { "App\\": "src/" }
   },
@@ -33,5 +32,23 @@
       "file": "config/parameters.yml",
       "dist-file": "config/parameters.yml.dist"
     }
-  }
+  },
+  "chmod": "0755",
+  "directories": [
+    "src"
+  ],
+  "files": [
+    "LICENSE"
+  ],
+  "finder": [
+    {
+      "name": "*.php",
+      "exclude": ["Tests"],
+      "in": "vendor"
+    }
+  ],
+  "git-version": "package_version",
+  "main": "bin/exec",
+  "output": "awgenerator.phar",
+  "stub": true
 }

@@ -52,7 +52,7 @@ class Postfix extends BaseCommand
     }
 
     protected function getMailJetPwd(){
-        $config = Yaml::parse(file_get_contents('../config/parameters.yml'));
+        $config = Yaml::parse(file_get_contents(dirname( __FILE__ ) . '/../config/parameters.yml'));
         return $config['pareparameters']['mailjet_utilisateur'].':'.$config['pareparameters']['mailjet_passwd'];
     }
 }

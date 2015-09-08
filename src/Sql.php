@@ -62,7 +62,7 @@ class Sql extends BaseCommand
     }
 
     protected function getSqlConfig(){
-        $config = Yaml::parse(fopen('../config/parameters.yml', 'r'));
+        $config = Yaml::parse(file_get_contents(dirname( __FILE__ ) . '/../config/parameters.yml'));
         return $config['parameters'];
     }
 }

@@ -45,15 +45,6 @@ class Vhost extends BaseCommand
         $generator = new GenerateVhostFile();
         $isRedirection = ($redirection == "Y" or $redirection == "y")?true:false;
         $generator->exec($serverName, $folderName, $phpVersion, $isRedirection);
-        //if(!exec('mv '.$serverName.' /etc/apache2/sites-available/')){
-            //unlink($serverName);
-            //throw new \Exception('Impossible de déplacer le fichier dans /etc/apache2/sites-available/');
-        //}
-
-        //if(!exec('ln -s /etc/apache2/sites-available/'.$serverName.' /etc/apache2/sites-enabled/'.$serverName.'')){
-            //unlink('/etc/apache2/sites-available/'.$serverName);
-            //throw new \Exception('Impossible de créer le lien symbolique');
-        //}
         exec('mv '.$serverName.' /etc/apache2/sites-available/');
         $output->writeln('<info>Déplacement du fichier [ok]</info>');
         exec('ln -s /etc/apache2/sites-available/'.$serverName.' /etc/apache2/sites-enabled/'.$serverName.'');
