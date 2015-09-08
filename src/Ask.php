@@ -94,7 +94,7 @@ class Ask {
             throw new \Exception('Aucune version de php disponible...');
         }
         foreach($scandir as $filename) {
-            if(strpos($filename, 'php-cgi-')){
+            if(strpos($filename, 'php-cgi-') !== false){
                 $return[] = str_replace("php-cgi-", "", $filename);
             }
         }
