@@ -47,7 +47,7 @@ class Postfix extends BaseCommand
         file_put_contents("/etc/postfix/sender_relay", $to_add, FILE_APPEND | LOCK_EX);
         $to_add = "$email $mailjetpwd\n";
         file_put_contents("/etc/postfix/sasl_passwd", $to_add, FILE_APPEND | LOCK_EX);
-        exec('cd /etc/postfix && postmap sasl_passwd sender_relay && postfix reload', $output, $status);
+        exec('cd /etc/postfix && postmap sasl_passwd sender_relay && postfix reload');
         $output->writeln('<info>Ajout du mail dans postfix [ok]</info>');
     }
 
