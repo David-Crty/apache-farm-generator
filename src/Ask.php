@@ -68,14 +68,17 @@ class Ask {
      * @return mixed
      */
     public static function askPhp($dialog,OutputInterface $output, $question){
-        return $dialog->select(
+        $version_php_availabled = Ask::getPhpVersionAvailable();
+
+        $response = $dialog->select(
             $output,
             $question,
-            Ask::getPhpVersionAvailable(),
+            $version_php_availabled,
             false,
             false,
             "Cette version de php n'est pas disponible"
         );
+        return $version_php_availabled[$response];
     }
 
     /**
@@ -84,15 +87,14 @@ class Ask {
      * @throws \Exception
      */
     protected static function getPhpVersionAvailable(){
-        return array('4.4', '5.6.2');
         $scandir = scandir('/var/www/cgi-bin-php/');
         $return = array();
         if(!$scandir){
             throw new \Exception('Aucune version de php disponible...');
         }
         foreach($scandir as $filename) {
-            if (preg_match('/\d+(?:\.\d+)+/', $filename, $matches)) {
-                $return[] = $matches;
+            if(strpos($filename, 'php-cgi-')){
+                $return[] = str_replace("php-cgi-", "", $filename);
             }
         }
         return $return;

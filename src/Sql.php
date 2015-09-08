@@ -12,6 +12,7 @@ use Symfony\Component\Console\Command\Command as BaseCommand;
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
+use Symfony\Component\Yaml\Yaml;
 
 class Sql extends BaseCommand
 {
@@ -44,10 +45,10 @@ class Sql extends BaseCommand
         $username = $input->getArgument('username');
         $pwd = $input->getArgument('password');
         $bdd = $input->getArgument('dbname');
-        $root_password="";
+        $parameters = $this->getSqlConfig();
+        $host = $parameters['database_host'];
         try {
-            $dbh = new \PDO("mysql:host=localhost", "root", $root_password);
-
+            $dbh = new \PDO("mysql:host=$host", $parameters['database_user'], $parameters['database_password']);
             $dbh->exec("CREATE DATABASE `$bdd`;
                 CREATE USER '$username'@'localhost' IDENTIFIED BY '$pwd';
                 GRANT ALL ON `$bdd`.* TO '$username'@'localhost';
@@ -58,5 +59,10 @@ class Sql extends BaseCommand
             die("DB ERROR: ". $e->getMessage());
         }
         $output->writeln('[ok]');
+    }
+
+    protected function getSqlConfig(){
+        $config = Yaml::parse(file_get_contents('../config/parameters.yml'));
+        return $config['parameters'];
     }
 }
